@@ -9,6 +9,7 @@ ROOT = tk.Tk()
 ROOT.geometry(str(WIDTH) + 'x' + str(HEIGHT))
 
 class Bits:
+    # Respresents 10 bits of a number
     def __init__(self, random=True):
         self.x0 = randint(0, 1) & random
         self.x1 = randint(0, 1) & random
@@ -22,6 +23,7 @@ class Bits:
         self.x9 = randint(0, 1) & random
 
 class Digit:
+    # Draws one digit from bits of a number
     def __init__(self, bits: Bits=Bits(random=False)):
         self.y0 = (~bits.x2 & 1) | bits.x3 | bits.x1
         self.y1 = (~bits.x1 & 1) | (~(bits.x2 ^ bits.x3) & 1)
@@ -32,6 +34,7 @@ class Digit:
         self.y6 = (~bits.x1 & 1) & (~bits.x3 & 1) | bits.x2 & (~bits.x3 & 1)
     
     def draw_digit(self, x1, y1, x2, y2, canvas: tk.Canvas):
+        # Draws digit in canvas
         x_len = fabs(x2 - x1)
         y_len = fabs(y2 - y1) // 2
         w = 3
@@ -52,13 +55,16 @@ class Digit:
 
 
 class Circle:
+    # Circle for one diode
     def __init__(self, color='green'):
         self.color = color
 
     def draw_diode(self, x, y, r, canvas: tk.Canvas):
+        # Draws diode
         return canvas.create_oval(x, y, x + r, y + r, fill=self.color)
 
 class Number:
+    # Represent whole number with 3 digits in it
     def __init__(self, bits: Bits):
         self.height = 100
         self.width = WIDTH
@@ -68,12 +74,14 @@ class Number:
         self.bits = bits
 
     def sum_bits(self, number: Bits):
+        # Get full number from bits
         num = 0
         for i, bit in enumerate(sorted(number.__dict__.keys(), key=lambda x: int(x[1]))):
             num += number.__dict__[bit] << i
         return num
 
     def get_digit(self, number):
+        # Get digit bits from number
         digit = number % 10
         digit_bits = Bits(random=False)
         i = 0
@@ -84,6 +92,7 @@ class Number:
         return digit_bits
 
     def process_number(self, number):
+        # Makes number with 3 digits
         num = self.sum_bits(number)
         bits_array = []
         for i in range(3):
@@ -92,6 +101,7 @@ class Number:
         return bits_array[::-1]
 
     def draw_number(self):
+        # Draws 3 digits of a number
         pad = 20
         digit_height = 90
         digit_width = 50
@@ -112,6 +122,7 @@ class Number:
             digit.draw_digit(x_axis[i][0], y1, x_axis[i][1], y2, self.canvas)
 
 class Diodes:
+    # Diode row with text 256...1
     def __init__(self, number: Number, random: Bits=None):
         self.height = 100
         self.width = WIDTH
@@ -123,6 +134,7 @@ class Diodes:
         self.random_bits = random
 
     def draw_diodes(self, one_player=False, bits: Bits=None):
+        # Draws diode row
         pad = 20
         r = 15
         x = WIDTH // 2 - 4 * (pad + r)
@@ -136,6 +148,7 @@ class Diodes:
             x += pad + r
     
     def diode_clicked(self, diode):
+        # Event for changing diode state
         if self.canvas.itemcget(diode, 'fill') == 'green':
             self.canvas.itemconfig(diode, fill='red')
             idx = self.diodes.index(diode)
@@ -168,6 +181,7 @@ class Diodes:
         
 
 class Interface:
+    # Game interface
     def __init__(self):
         self.one_player = tk.Button(ROOT, text='One player', command=self.one_player_game)
         self.one_player['font'] = font.Font(family='Helvetica', size=30, weight='bold')
@@ -177,6 +191,7 @@ class Interface:
         self.two_players.place(x=WIDTH - 180, y=HEIGHT // 2)
         
     def one_player_game(self):
+        # Game for one player
         self.one_player.destroy()
         self.two_players.destroy()
 
@@ -189,6 +204,7 @@ class Interface:
         diodes.draw_diodes(one_player=True, bits=random_number)
 
     def two_players_game(self):
+        # Game for two players
         self.one_player.destroy()
         self.two_players.destroy()
 
