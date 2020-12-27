@@ -164,7 +164,7 @@ class Diodes:
             child.destroy()
         win = tk.Label(ROOT, text='You win', fg='green')
         win['font'] = font.Font(family='Helvetica', size=30, weight='bold')
-        win.place(x=WIDTH // 2, y=HEIGHT // 2)
+        win.place(x=WIDTH // 2 - 40, y=HEIGHT // 2)
         
 
 class Interface:
