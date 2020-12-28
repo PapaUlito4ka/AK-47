@@ -176,8 +176,11 @@ class Diodes:
         for child in ROOT.winfo_children():
             child.destroy()
         win = tk.Label(ROOT, text='You win', fg='green')
+        number = tk.Label(ROOT, text='Number is {}'.format(self.number.sum_bits(self.bits)), fg='green')
         win['font'] = font.Font(family='Helvetica', size=30, weight='bold')
-        win.place(x=WIDTH // 2 - 40, y=HEIGHT // 2)
+        number['font'] = font.Font(family='Helvetica', size=30, weight='bold')
+        win.place(x=WIDTH // 2 - 50, y=HEIGHT // 2 - 20)
+        number.place(x=WIDTH // 2 - 50, y=HEIGHT // 2 + 20)
         
 
 class Interface:
